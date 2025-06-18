@@ -82,21 +82,4 @@ services:
     ports:
       - 9004:8787
     restart: unless-stopped
----
-services:       ####-WHISPARR-####
-  sabnzbd:
-    image: ghcr.io/hotio/whisparr
-    container_name: whisparr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/whisparr/config:/config
-      - /appdata/whisparr/backup:/data/backup
-      - /mnt/datavault/media/xxx:/data/xxx     
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9005:6969
-    restart: unless-stopped
 
