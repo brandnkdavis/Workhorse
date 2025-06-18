@@ -22,7 +22,7 @@ services:      ####-PROWLARR-####
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTTZ=America/Chicago
+      - TZ=America/Chicago
     volumes:
       - /appdata/prowlarr/config:/config
       - /appdata/prowlarr/backup:/data/backup
