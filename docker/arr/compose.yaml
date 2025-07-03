@@ -65,21 +65,3 @@ services:       ####-SONARR-####
     ports:
       - 9003:8989
     restart: unless-stopped
----
-services:
-  readarr:      ####-READARR-####
-    image: lscr.io/linuxserver/readarr:develop
-    container_name: readarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/readarr/config:/config
-      - /appdata/readarr/backup:/data/backup
-      - /mnt/datavault/media/books:/data/books
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9004:8787
-    restart: unless-stopped
-
