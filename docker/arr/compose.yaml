@@ -53,7 +53,7 @@ services:
       - TZ=America/Chicago
     volumes:
       - /AppData/radarr/config:/config
-      - /AppData/radarr/backups:/data/backup
+      - /AppData/radarr/backup:/data/backup
       - /mnt/media:/data
       - /mnt/downloads:/data/downloads
     restart: unless-stopped
