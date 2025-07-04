@@ -24,6 +24,7 @@ mkdir -p /mnt/downloads
 # Set ownership
 echo "🔐 Setting ownership to UID 1000 / GID 1000..."
 chown -R 1000:1000 /AppData
-chown -R 1000:1000 /mnt
+chown -R 1000:1000 /mnt/media
+chown -R 1000:1000 /mnt/downloads
 
 echo "✅ All directories created and permissions set."
