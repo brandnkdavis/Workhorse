@@ -1,47 +1,66 @@
-# Currently untested as written
-services:
   plex:
-    image: lscr.io/linuxserver/plex:latest
     container_name: plex
+    image: ghcr.io/hotio/plex
     network_mode: host
+    ports:
+      - "32400:32400"
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Chicago
-      - VERSION=docker
-      - PLEX_CLAIM= #optional
-    ports:
-      - 32400:32400
+      - UMASK=002
+      - TZ=Etc/UTC
+      - PLEX_PASS=yes
+      - PLEX_CLAIM_TOKEN=
+      - PLEX_NO_AUTH_NETWORKS=192.168.1.0/24
+      - PLEX_BETA_INSTALL=true
+      - PLEX_PURGE_CODECS=false
     devices:
-     - /dev/dri:/dev/dri # QuickSync
+      - /dev/dri:/dev/dri # QuickSync
     volumes:
       - /AppData/plex/config:/config
-      - /mnt/datavault/data/media:/data
-    restart: unless-stopped
+      - /tmp:/transcode
+      - /mnt/media:/data
 
   overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
+    container_name: overseerr  
+    image: ghcr.io/hotio/overseerr
+    ports:
+      - "5055:5055"
     environment:
       - PUID=1000
       - PGID=1000
+      - UMASK=002
       - TZ=America/Chicago
     volumes:
       - /AppData/overseer/config:/config
-      - /AppData/overseer/sslcert:/data
-    ports:
-      - 5055:5055
     restart: unless-stopped
 
   tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
+    image: ghcr.io/hotio/tautulli
+    ports:
+      - "8181:8181"
     environment:
       - PUID=1000
       - PGID=1000
+      - UMASK=002
       - TZ=America/Chicago
+      - WEBUI_PORTS=8181/tcp,8181/udp
     volumes:
-      - /AppData/tautulli:/config
-    ports:
-      - 8181:8181
+      - /AppData/tautulli/config:/config
     restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: Watchtower
+    environment:
+      - TZ=America/Chicago
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=false
+      - WATCHTOWER_SCHEDULE=0 0 2 * * *
+    # Pass the Docker Socket to container to manage Docker in the NAS
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
