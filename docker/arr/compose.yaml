@@ -1,67 +1,79 @@
----
-services:       ####-SABNZBD-####
-  sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/sabnzbd/config:/config
-      - /appdata/sabnzbd/backup:/data/backup
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9000:8080
-    restart: unless-stopped
----
-services:      ####-PROWLARR-####
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/prowlarr/config:/config
-      - /appdata/prowlarr/backup:/data/backup
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9001:9696
-    restart: unless-stopped
----    
-services:       ####-RADARR-#### 
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/radarr/config:/config
-      - /appdata/radarr/backup:/data/backup
-      - /mnt/datavault/media/movies:/data/movies
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9002:7878
-    restart: unless-stopped
----    
-services:       ####-SONARR-####
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
-    volumes:
-      - /appdata/sonarr/config:/config
-      - /appdata/sonarr/backup:/data/backup
-      - /mnt/datavault/media/tv:/data/tv
-      - /mnt/datavault/media/anime:/data/anime
-      - /mnt/datavault/downloads:/data/downloads
-    ports:
-      - 9003:8989
-    restart: unless-stopped
+services:
+    sabnzbd:
+        image: lscr.io/linuxserver/sabnzbd:latest
+        container_name: sabnzbd
+        hostname: sabnzbd
+        ports:
+            - 9000:8080
+        environment:
+            - PUID=${PUID}
+            - PGID=${PGID}
+            - TZ=${TZ}
+        volumes:
+            - /DATA/AppData/downloaders/sabnzbd/config:/config
+            - /DATA/AppData/downloaders/sabnzbd/backup:/data/backup
+            - /mnt/datavault/downloads:/data/downloads
+        restart: unless-stopped
+        networks:
+            - downloaders
+      
+    prowlarr:
+        image: lscr.io/linuxserver/prowlarr:latest
+        container_name: prowlarr
+        hostname: prowlarr
+        ports:
+            - 9001:9696
+        environment:
+            - PUID=${PUID}
+            - PGID=${PGID}
+            - TZ=${TZ}
+        volumes:
+            - /DATA/AppData/downloaders/prowlarr/config:/config
+            - /DATA/AppData/downloaders/prowlarr/backup:/data/backup
+            - /mnt/datavault/downloads:/data/downloads
+        restart: unless-stopped
+        networks:
+            - downloaders
+
+    radarr:
+        image: lscr.io/linuxserver/radarr:latest
+        container_name: radarr
+        hostname: radarr
+        ports:
+            - 9002:7878
+        environment:
+            - PUID=${PUID}
+            - PGID=${PGID}
+            - TZ=${TZ}
+        volumes:
+            - /DATA/AppData/downloaders/radarr/config:/config
+            - /DATA/AppData/downloaders/radarr/backups:/data/backups
+            - /mnt/datavault/media/movies:/data/movies
+            - /mnt/datavault/downloads:/data/downloads
+        restart: unless-stopped
+        networks:
+            - downloaders
+            
+    sonarr:
+        image: lscr.io/linuxserver/sonarr:latest
+        container_name: sonarr
+        hostname: sonarr
+        ports:
+            - 9003:8989
+        environment:
+            - PUID=${PUID}
+            - PGID=${PGID}
+            - TZ=${TZ}
+        volumes:
+            - /DATA/AppData/downloaders/sonarr/config:/config
+            - /DATA/AppData/downloaders/sonarr/backup:/data/backup
+            - /mnt/datavault/media/tv:/data/tv
+            - /mnt/datavault/media/anime:/data/anime
+            - /mnt/datavault/downloads:/data/downloads
+        restart: unless-stopped
+        networks:
+            - downloaders
+
+networks:
+    downloaders:
+        driver: bridge
