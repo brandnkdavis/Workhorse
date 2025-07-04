@@ -16,7 +16,7 @@ services:
     volumes:
       - /AppData/sabnzbd/config:/config
       - /AppData/sabnzbd/backup:/data/backup
-      - /mnt/downloads:/data/downloads
+      - /mnt/pve/downloads:/data/downloads
     restart: unless-stopped
     networks:
       - arrs
@@ -35,7 +35,7 @@ services:
     volumes:
       - /AppData/prowlarr/config:/config
       - /AppData/prowlarr/backup:/data/backup
-      - /mnt/downloads:/data/downloads
+      - /mnt/pve/downloads:/data/downloads
     restart: unless-stopped
     networks:
       - arrs
@@ -55,7 +55,7 @@ services:
       - /AppData/radarr/config:/config
       - /AppData/radarr/backup:/data/backup
       - /mnt/pve/media:/data
-      - /mnt/downloads:/data/downloads
+      - /mnt/pve/downloads:/data/downloads
     restart: unless-stopped
     networks:
       - arrs
@@ -75,7 +75,7 @@ services:
       - /AppData/sonarr/config:/config
       - /AppData/sonarr/backup:/data/backup
       - /mnt/pve/media:/data
-      - /mnt/downloads:/data/downloads
+      - /mnt/pve/downloads:/data/downloads
     restart: unless-stopped
     networks:
       - arrs
