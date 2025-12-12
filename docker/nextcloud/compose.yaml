@@ -1,0 +1,61 @@
+version: "3.8"
+
+    services:
+        mariadb:
+            image: lscr.io/linuxserver/mariadb:latest
+                container_name: mariadb
+            environment:
+                - PUID=1026
+                - PGID=100
+                - TZ=America/Chicago
+                - MYSQL_ROOT_PASSWORD='HappyEveryday$$5416'
+                - MYSQL_DATABASE=nextcloud
+                - MYSQL_USER=nc_user
+                - MYSQL_PASSWORD='HappyEveryday$$5416'
+            volumes:
+                - /volume1/docker/mariadb/config:/config
+            networks:
+                - nextcloud_net
+            restart: unless-stopped
+        
+        nextcloud:
+            image: lscr.io/linuxserver/nextcloud:latest
+                container_name: nextcloud
+            depends_on:
+                - mariadb
+            environment:
+                - PUID=1026
+                - PGID=100
+                - TZ=America/Chicago
+            volumes:
+                - /volume1/docker/nextcloud/config:/config
+                - /volume1/docker/nextcloud/data:/data
+            ports:
+                - "8443:443"
+            networks:
+                - nextcloud_net
+            restart: unless-stopped
+        
+        phpmyadmin:
+            image: lscr.io/linuxserver/phpmyadmin:latest
+                container_name: phpmyadmin
+            depends_on:
+                - mariadb
+            environment:
+                - PUID=1026
+                - PGID=100
+                - TZ=America/Chicago
+                - PMA_HOST=mariadb
+                - PMA_PORT=3306
+                - PMA_ARBITRARY=0
+            volumes:
+                - /volume1/docker/phpmyadmin/config:/config
+            ports:
+                - "8088:80"
+            networks:
+                - nextcloud_net
+            restart: unless-stopped
+        
+        networks:
+            nextcloud_net:
+                driver: bridge
