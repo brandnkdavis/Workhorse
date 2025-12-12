@@ -1,62 +1,41 @@
-version: "3.8"
+version: "3.9"
 
-    services:
-        mariadb:
-            image: lscr.io/linuxserver/mariadb:latest
-            container_name: mariadb
-            environment:
-                - PUID=1026
-                - PGID=100
-                - TZ=America/Chicago
-                - MYSQL_ROOT_PASSWORD='PASSWORD'
-                - MYSQL_DATABASE=nextcloud
-                - MYSQL_USER=nc_user
-                - MYSQL_PASSWORD='PASSWORD'
-            volumes:
-                - /volume1/docker/mariadb/config:/config
-            networks:
-                - nextcloud_net
-            restart: unless-stopped
-        
-        nextcloud:
-            image: lscr.io/linuxserver/nextcloud:latest
-            container_name: nextcloud
-            depends_on:
-                - mariadb
-            environment:
-                - PUID=1026
-                - PGID=100
-                - TZ=America/Chicago
-            volumes:
-                - /volume1/docker/nextcloud/config:/config
-                - /volume1/data/files:/app/www/public/files
-                # - /volume1/docker/nextcloud/data:/data
-            ports:
-                - "8443:443"
-            networks:
-                - nextcloud_net
-            restart: unless-stopped
-        
-        phpmyadmin:
-            image: lscr.io/linuxserver/phpmyadmin:latest
-            container_name: phpmyadmin
-            depends_on:
-                - mariadb
-            environment:
-                - PUID=1026
-                - PGID=100
-                - TZ=America/Chicago
-                - PMA_HOST=mariadb
-                - PMA_PORT=3306
-                - PMA_ARBITRARY=0
-            volumes:
-                - /volume1/docker/phpmyadmin/config:/config
-            ports:
-                - "8088:80"
-            networks:
-                - nextcloud_net
-            restart: unless-stopped
-        
-        networks:
-            nextcloud_net:
-                driver: bridge
+volumes:
+  nextcloud_app: /volume1/docker/nextcloud/config # Application files (less important, but good to have separate)
+  nextcloud_data: /volume1/docker/nextcloud/data # User data (VERY IMPORTANT)
+  db_data: /volume1/docker/mariadb/config       # MariaDB data
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Happy5416 # Use an environment variable or secret
+      MYSQL_PASSWORD: Happy5416          # Use an environment variable or secret
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nc_user #Keep user consistent
+
+  app:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8088:80
+    depends_on:
+      - db
+    volumes:
+      - nextcloud_app:/var/www/html # Store app files
+      - nextcloud_data:/var/www/html/data  # VERY IMPORTANT: Store data here!
+    environment:
+      MYSQL_PASSWORD: Happy5416 #Use the same as mariadb
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nc_user #Keep user consistent
+      MYSQL_HOST: db  # Use the service name as the hostname
+      NEXTCLOUD_TRUSTED_DOMAINS: cloud.n13.io  # Replace with your domain!
+      # More Nextcloud configuration options as needed (e.g., proxy configuration)
+
+networks:
+  default:
+    name: nextcloud-network #Optional custom network name
