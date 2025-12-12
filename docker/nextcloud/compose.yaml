@@ -3,7 +3,7 @@ version: "3.8"
     services:
         mariadb:
             image: lscr.io/linuxserver/mariadb:latest
-                container_name: mariadb
+            container_name: mariadb
             environment:
                 - PUID=1026
                 - PGID=100
@@ -20,7 +20,7 @@ version: "3.8"
         
         nextcloud:
             image: lscr.io/linuxserver/nextcloud:latest
-                container_name: nextcloud
+            container_name: nextcloud
             depends_on:
                 - mariadb
             environment:
@@ -38,7 +38,7 @@ version: "3.8"
         
         phpmyadmin:
             image: lscr.io/linuxserver/phpmyadmin:latest
-                container_name: phpmyadmin
+            container_name: phpmyadmin
             depends_on:
                 - mariadb
             environment:
