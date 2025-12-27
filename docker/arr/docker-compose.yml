@@ -27,7 +27,7 @@ services:
       - UMASK=000
     volumes:
       - /opt/arr-stack/config/sonarr:/config
-      - /mnt/pve//media:/data/media
+      - /data/media:/data/media
       - /data/downloads:/data/downloads
     ports:
       - 8989:8989
@@ -47,7 +47,7 @@ services:
       - UMASK=000
     volumes:
       - /opt/arr-stack/config/radarr:/config
-      - /mnt/pve//media:/data/media:/data/media
+      - /data/media:/data/media
       - /data/downloads:/data/downloads
     ports:
       - 7878:7878
@@ -93,7 +93,6 @@ services:
       - radarr
     networks:
       - arr-net
-
 
   watchtower:
     container_name: watchtower
