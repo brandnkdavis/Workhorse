@@ -5,8 +5,8 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
       - TZ=America/Chicago
       - UMASK=000
     volumes:
@@ -21,8 +21,8 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
       - TZ=America/Chicago
       - UMASK=000
     volumes:
@@ -41,8 +41,8 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
       - TZ=America/Chicago
       - UMASK=000
     volumes:
@@ -61,8 +61,8 @@ services:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     environment:
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
       - TZ=America/Chicago
       - UMASK=000
     volumes:
@@ -81,8 +81,8 @@ services:
       - LOG_LEVEL=info
       - TZ=America/Chicago
       - UMASK=000
-      - PUID=1026
-      - PGID=100
+      - PUID=1000
+      - PGID=1000
     volumes:
       - /opt/arr-stack/config/jellyseerr:/app/config
     ports:
@@ -106,7 +106,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-
+    networks:
+      - arr-net
+      
 networks:
   arr-net:
     driver: bridge
