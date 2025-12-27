@@ -74,16 +74,17 @@ services:
     networks:
       - arr-net
 
-  overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
     environment:
-      - PUID=1026
-      - PGID=100
+      - LOG_LEVEL=info
       - TZ=America/Chicago
       - UMASK=000
+      - PUID=1026
+      - PGID=100
     volumes:
-      - /opt/arr-stack/config/overseerr:/config
+      - /opt/arr-stack/config/jellyseerr:/app/config
     ports:
       - 5055:5055
     restart: unless-stopped
@@ -92,6 +93,7 @@ services:
       - radarr
     networks:
       - arr-net
+
 
   watchtower:
     container_name: watchtower
