@@ -94,6 +94,23 @@ services:
     networks:
       - arr-net
 
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      # Mount the directory you want to manage (change `/home/user/data` to your actual data path)
+      - /data
+      # Mount a directory for File Browser to store its database and settings (change `/home/user/appdata/filebrowser` to your config path)
+      - /opt/arr-stack/config/filebrowser:/database
+    ports:
+      - 8081:80
+    restart: unless-stopped
+    networks:
+      - arr-net
+
   watchtower:
     container_name: watchtower
     image: containrrr/watchtower:latest
