@@ -11,6 +11,9 @@ services:
       - /opt/arr-stack/config/slskd:/app
       - /data/media/music:/data/music
       - /data/downloads/complete/libarr:/data/downloads
+    shares:
+      directories:
+        - /music
     user: "1000:1000"
     restart: unless-stopped
     networks:
