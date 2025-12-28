@@ -27,7 +27,7 @@ services:
       - UMASK=000
     volumes:
       - /opt/arr-stack/config/sonarr:/config
-      - /data/media:/data/media
+      - /data/media:/data/media			# nfs -DataVault bind
       - /data/downloads:/data/downloads
     ports:
       - 8989:8989
@@ -47,7 +47,7 @@ services:
       - UMASK=000
     volumes:
       - /opt/arr-stack/config/radarr:/config
-      - /data/media:/data/media
+      - /data/media:/data/media			# nfs -DataVault bind
       - /data/downloads:/data/downloads
     ports:
       - 7878:7878
@@ -113,6 +113,22 @@ services:
     networks:
       - arr-net
 
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Chicago
+      - UMASK=000
+    volumes:
+      - /opt/arr-stack/config/lidarr:/config
+      - /data/media/music:/data/music			# nfs -DataVault bind
+      - /data/downloads/complete/libarr:/data/downloads
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+
   slskd:
     image: slskd/slskd:latest
     container_name: slskd
@@ -124,8 +140,8 @@ services:
       - 50300:50300/tcp
     volumes:
       - /opt/arr-stack/config/slskd:/app
-      - /data/media/music:/data/music
-      - /data/downloads:/data/downloads
+      - /data/media/music:/data/music			# nfs -DataVault bind
+      - /data/downloads/complete/libarr:/data/downloads
     user: 1000:1000
     restart: unless-stopped
     networks:
