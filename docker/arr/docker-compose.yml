@@ -126,23 +126,36 @@ services:
       - 8686:8686
     restart: unless-stopped
 
-  slskd:
+slskd:
     image: slskd/slskd:latest
     container_name: slskd
     environment:
       - SLSKD_REMOTE_CONFIGURATION=true
-    ports:
-      - 5030:5030/tcp
-      - 5031:5031/tcp
-      - 50300:50300/tcp
+      - SLSKD_SHARED_DIR=/music
+    # Ports are usually unnecessary with macvlan as the container 
+    # gets its own IP, but kept here for reference.
     volumes:
       - /opt/arr-stack/config/slskd:/app
-      - /data/media/music:/data/music			# nfs -DataVault bind
+      - /data/media/music:/music
       - /data/downloads/complete/libarr:/data/downloads
-    user: 1000:1000
+    shares:
+      directories:
+        - /music
+    user: "1000:1000"
     restart: unless-stopped
     networks:
-      - arr-net
+      external_net:
+        ipv4_address: 192.168.4.110
+
+networks:
+  external_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth1  # Links to your eth1 interface
+    ipam:
+      config:
+        - subnet: 192.168.4.0/24    # Change this to match your actual network CIDR
+          gateway: 192.168.4.1     # Change this to your router's IP
 
   watchtower:
     container_name: watchtower
