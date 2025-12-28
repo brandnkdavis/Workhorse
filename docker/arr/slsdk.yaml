@@ -10,11 +10,8 @@ services:
     # gets its own IP, but kept here for reference.
     volumes:
       - /opt/arr-stack/config/slskd:/app
-      - /data/media/music:/data/music
+      - /data/media/music:/music
       - /data/downloads/complete/libarr:/data/downloads
-    shares:
-      directories:
-        - /music
     user: "1000:1000"
     restart: unless-stopped
     networks:
