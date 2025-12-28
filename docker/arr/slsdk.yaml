@@ -6,6 +6,7 @@ services:
     environment:
       - SLSKD_REMOTE_CONFIGURATION=true
       - SLSKD_SHARED_DIR=/music
+      - SLSKD_DOWNLOADS_DIR=/data/downloads
     # Ports are usually unnecessary with macvlan as the container 
     # gets its own IP, but kept here for reference.
     volumes:
