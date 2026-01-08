@@ -1,0 +1,16 @@
+services:
+    radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1026
+      - PGID=100
+      - TZ=America/Chicago
+      - UMASK=000
+    volumes:
+      - /volume1/docker/radarr/config:/config
+      - /volume1/data/media:/data/media
+      - /volume1/data/downloads:/data/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
