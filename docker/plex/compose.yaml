@@ -1,53 +1,36 @@
+services:
   plex:
+    image: lscr.io/linuxserver/plex:latest
     container_name: plex
-    image: ghcr.io/hotio/plex
     network_mode: host
-    ports:
+		ports:
       - "32400:32400"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
-      - TZ=Etc/UTC
-      - PLEX_PASS=yes
-      - PLEX_CLAIM_TOKEN=
-      - PLEX_NO_AUTH_NETWORKS=192.168.1.0/24
-      - PLEX_BETA_INSTALL=true
-      - PLEX_PURGE_CODECS=false
-    devices:
-      - /dev/dri:/dev/dri # QuickSync
-    volumes:
-      - /AppData/plex/config:/config
-      - /tmp:/transcode
-      - /mnt/media:/data
-
-  overseerr:
-    container_name: overseerr  
-    image: ghcr.io/hotio/overseerr
-    ports:
-      - "5055:5055"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
+      - PUID=1026
+      - PGID=100
       - TZ=America/Chicago
+			- UMASK=000
+      - VERSION=docker
+      - PLEX_CLAIM= #optional
     volumes:
-      - /AppData/overseer/config:/config
+      - /volume1/docker/plex/config:/config
+      - /volume1/data/media:/data/media
+		devices:
+      - /dev/dri:/dev/dri
     restart: unless-stopped
 
   tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
-    image: ghcr.io/hotio/tautulli
-    ports:
-      - "8181:8181"
     environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
+      - PUID=1026
+      - PGID=100
       - TZ=America/Chicago
-      - WEBUI_PORTS=8181/tcp,8181/udp
+			- UMASK=000
     volumes:
-      - /AppData/tautulli/config:/config
+      - /volume1/docker/tautulli/config:/config
+    ports:
+      - 8181:8181
     restart: unless-stopped
 
   watchtower:
