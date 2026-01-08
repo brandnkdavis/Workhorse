@@ -4,10 +4,10 @@ services:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
     environment:
-      - PUID=1026
-      - PGID=100
-      - TZ=America/Chicago
-			- UMASK=000
+	    - PUID=1026
+	    - PGID=100
+	    - TZ=America/Chicago
+		- UMASK=000
     volumes:
       - /volume1/docker/overseerr/config:/config
     ports:
