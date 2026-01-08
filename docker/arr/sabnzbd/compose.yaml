@@ -1,0 +1,15 @@
+services:
+	sabnzbd:
+		image: lscr.io/linuxserver/sabnzbd:latest
+		container_name: sabnzbd
+		environment:
+			- PUID=1026
+			- PGID=100
+			- TZ=America/Chicago
+			- UMASK=000
+		volumes:
+			- /volume1/docker/sabnzbd/config:/config
+			- /volume1/data/downloads:/data/downloads
+		ports:
+			- 8080:8080
+		restart: unless-stopped
