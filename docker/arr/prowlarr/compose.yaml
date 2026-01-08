@@ -1,0 +1,14 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1026
+      - PGID=100
+      - TZ=America/Chicago
+      - UMASK=000
+    volumes:
+      - /volume1/docker/prowlarr/config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
